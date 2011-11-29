@@ -158,8 +158,9 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
 		$model=new LoginForm;
-
-		// if it is ajax validation request
+        
+        
+        // if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
 			echo CActiveForm::validate($model);
@@ -170,9 +171,9 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
-			
-			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
+            // validate user input and redirect to the previous page if valid
+            
+			if($model->validate() && $model->login() && $model->comparar())
 				$this->redirect(array('eventos/index'));
 				//$this->redirect(Yii::app()->user->returnUrl);
 		}
@@ -191,9 +192,49 @@ class SiteController extends Controller
     
     public function actionconfirmarMail()
 	{
-        /*if(isset($_GET['key'])){
-            $params['token']=$_GET['key'];
-        }*/
+        
 		$this->render('confirmarmail');
 	}
+    
+    public function actionConfirmacion(){
+        if(isset($_GET['key'])){
+            $params['token']=$_GET['key'];
+        }
+        $model=new Fotografos;
+        $fotografos = Fotografos::model()->findByAttributes(array('token'=>$params['token']));
+        if (is_null($fotografos))
+			{
+				//no se encontro el token, hay que mostrar un mensaje
+				$model->mensaje = "No existe esa clave de confirmaci&oacute;n.";
+                
+                
+            }
+			else 
+			{    
+                /*$var=84;
+                $row = Yii::app()->db->createCommand(array(
+                    'select' => array('nombre', 'email'),
+                    'from' => 'fotografos',
+                    'where' => 'id=:id',
+                    'params' => array(':id'=>$var),
+                ))->queryRow();
+                
+                //print_r($row);
+                foreach ($row as $dato=>$v){
+                echo "$dato: ".$v."</br>";
+                }*/
+                
+			    $model->mensaje = "Confirmaci&oacute;n de correo completada correctamente. </br>
+                Ya puede ingresar en su cuenta <a href='/site/login/'>aqu&iacute;</a>";
+                $fotografos->registrado = 1;
+                $fotografos->save(false,array('registrado'));
+                
+                /*echo "<pre>";
+                print_r($fotografos);
+                echo "</pre>";*/
+			}
+        $this->render('confirmarmail',array('model'=>$model));
+        
+    }
 }
+?>

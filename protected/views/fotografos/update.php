@@ -20,6 +20,9 @@ $this->layout='public';
 	<div class="col1">
 		<div class="box">
 			<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+            <!--NUEVO-->
+            <?php //echo $this->renderPartial('_form_update', array('model'=>$model)); ?>
+            <!--FIN NUEVO-->
 		</div>
 	</div>
 	<div class="col2">

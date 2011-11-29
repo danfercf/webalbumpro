@@ -84,20 +84,15 @@ class FotografosController extends Controller
 				$model->pass = $pass;
                 $model->registrado=0;
 				
-                $url=$this->createUrl($this->createAbsoluteUrl('site/confirmarMail'),array('key'=>$token));
-                
-                  if($model->save())
-				{
-					$mensaje = "Hola ";// . $model->nombre . ",\r\n";
-					$mensaje = $mensaje . "Tu nueva cuenta en Web Album Pro ha sido creada! \r\n";
-					$mensaje = $mensaje . "Para confirmar tu registro en el sitio, sigue el siguiente link: " . $url . "\r\n";
-					$mensaje = $mensaje . "Por cualquier inquetud, sugerencia o necesidad, puedes contactarnos en el siguiente formulario: " . $this->createAbsoluteUrl('site/contact/') . "\r\n\r\n";
-					$mensaje = $mensaje . "Te agradecemos que nos hayas elegido y esperamos que nuestro servicio sea lo que buscabas. \r\n\r\n";
-					$mensaje = $mensaje . "El equipo de Web Album Pro";
+                $url_full=$this->createAbsoluteUrl('site/Confirmacion',array('key'=>$token));
+                $url_contact=$this->createAbsoluteUrl('site/contact/');
+                //$url=$this->createUrl($url_full,array('key'=>$token));
+                if($model->save())
+                {
+                    
+                    $this->mailer($model->email,$model->nombre,$url_full,$url_contact);
 					
-					//mail($model->email,'Tu nueva cuenta en Web Album Pro',$mensaje);
-
-					// UserIdentity is your extended class of CUserIdentity
+                    // UserIdentity is your extended class of CUserIdentity
 					/*$identity=new UserIdentity($model->email,$pass_old);
 					$identity->authenticate();
 					
@@ -118,12 +113,44 @@ class FotografosController extends Controller
 			'model'=>$model,
 		));
 	}
-
+    
+    protected function mailer($correo,$nombre="",$url_full="",$url_contact=""){
+        $imagen=$this->createAbsoluteUrl('images/logo.png');
+        $index=$this->createAbsoluteUrl('/');
+        $title="Tu nueva cuenta en Web Album Pro ha sido creada!";
+        $body="
+                <p style='font-size:16px;font-weight:bold;'>Hola $nombre</p>
+                <p>Para confirmar tu registro en el sitio, sigue el siguiente link:</p>
+                <p><a style='text-decoration:underline;' href='$url_full'>$url_full</a></p>
+                <p>Por cualquier inquetud, sugerencia o necesidad, puedes contactarnos en el siguiente formulario:</p>
+                <p><a href='$url_contact'>$url_contact</a></p>
+                <p>Te agradecemos que nos hayas elegido y esperamos que nuestro servicio sea lo que buscabas.</p>
+                <p>El equipo de Web Album Pro</p>
+                <p><a href='$index'><img src='$imagen'/></a></p>
+                
+        ";
+        $html="<html>
+               <head>
+                	<title>$title</title>
+               </head>
+                
+               <body>$body</body>
+               </html>";
+        
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        
+        mail($correo,'Tu nueva cuenta en Web Album Pro',$html,$cabeceras);
+    }
+    
+    
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
+     
+    
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel(Yii::app()->user->id);
@@ -134,7 +161,9 @@ class FotografosController extends Controller
 		if(isset($_POST['Fotografos']))
 		{
 			$model->attributes=$_POST['Fotografos'];
-			
+            /*echo "<pre>";
+            print_r($model);
+			echo "</pre>";*/
 			// guardo los datos actuales "por las dudas"
 			$old_model = $this->loadModel($model->id);
 			
@@ -241,3 +270,4 @@ class FotografosController extends Controller
 		}
 	}
 }
+?>

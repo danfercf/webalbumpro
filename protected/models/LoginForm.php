@@ -10,8 +10,13 @@ class LoginForm extends CFormModel
 	public $username;
 	public $password;
 	public $rememberMe;
-
-	private $_identity;
+    public $registrado;
+    public $is_registrado=1;
+    public $new_pass;
+    public $passbd;
+    
+    
+    private $_identity;
 
 	/**
 	 * Declares the validation rules.
@@ -27,7 +32,8 @@ class LoginForm extends CFormModel
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
 			array('password', 'authenticate'),
-		);
+            array('registrado', 'comparar')
+        );
 	}
 
 	/**
@@ -39,6 +45,7 @@ class LoginForm extends CFormModel
 			'rememberMe'=>'Remember me next time',
 			'username'=>'Email',
 			'password'=>'Contrase&ntilde;a',
+            'registrado'=>'Registrado'
 		);
 	}
 
@@ -54,7 +61,7 @@ class LoginForm extends CFormModel
 			
 			$this->_identity=new UserIdentity($this->username,$this->password);
 			if(!$this->_identity->authenticate())
-				$this->addError('password','Combinac&oacute;n de Email y Contrase&ntilde;a incorrecta.');
+				$this->addError('password','Combinaci&oacute;n de Email y Contrase&ntilde;a incorrecta.');
 		}
 	}
 
@@ -78,4 +85,27 @@ class LoginForm extends CFormModel
 		else
 			return false;
 	}
+    public function comparar(){
+        $this->new_pass=hash('md5',$this->password);
+        //echo "aaaaaaaaaaaaa".$this->new_pass;
+        $row = Yii::app()->db->createCommand(array(
+                    'select' => array('nombre','email'),
+                    'from' => 'fotografos',
+                    'where' => 'email=:user AND pass=:pass AND registrado=:req',
+                    'params' => array(':user'=>$this->username,':pass'=>$this->new_pass,':req'=>$this->is_registrado),
+                ))->queryRow();
+       
+        if($row!=''){
+            //$this->addError('registrado','Usted todav&iacute;a no confirm&oacute; su registro.');
+            return true;
+        }else{
+            if($this->login()==true){
+                $this->addError('registrado','Usted todav&iacute;a no confirm&oacute; su registro.');
+            }if($this->login()==false){
+                $this->addError('registrado','O usted todav&iacute;a no confirm&oacute; su registro.');
+            }
+            return false;
+        }
+        
+    }
 }

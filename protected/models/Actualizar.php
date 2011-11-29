@@ -47,19 +47,20 @@ class Fotografos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, nombre, apellido', 'required'), //falta pais
+			array('email, nombre, apellido, idPais, provincia, localidad, direccion, telefono', 'required'), //falta pais
 			array('pass, pass_repeat','required', 'on'=>'create'),
-			array('aceptar_tyc','required','requiredValue'=>1,'message'=>'Debes aceptar los T&eacute;rminos y Condiciones.','on'=>'insert'),
 			array('email','unique','message'=>'El e-mail ingresado ya existe.'),
-			array('nombre, apellido', 'length', 'max'=>50),
-			array('email, pass, pass_repeat, token', 'length', 'max'=>100),
+			array('nombre, apellido, direccion', 'length', 'max'=>50),
+            array('telefono, telefono2', 'length', 'max'=>10),
+			array('email, pass, pass_repeat, token, url_web, url_blog, facebook, twitter, foto', 'length', 'max'=>100),
+            array('info', 'length', 'max'=>200),
 			array('fechaCreacion', 'safe'),
             //array('registrado', 'required'),
             array('pass', 'compare','compareAttribute'=>'pass_repeat'),
             //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register')
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, nombre, apellido, email, pass, fechaCreacion, token, registrado', 'safe', 'on'=>'search'),
+			array('id, nombre, apellido, email, pass, fechaCreacion, idPais, token, registrado, provincia, localidad, direccion, telefono, telefono2, url_web, url_blog, facebook, twitter, foto, info', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,8 +89,18 @@ class Fotografos extends CActiveRecord
 			'pass' => 'Contrase&ntilde;a',
 			'pass_repeat' => 'Confirmaci&oacute;n de contrase&ntilde;a',
 			'fechaCreacion' => 'Fecha Creacion',
-			'aceptar_tyc'=> 'Aceptar <a href="/site/tyc/" target="_blank">t&eacute;rminos y condiciones</a>'/*,
-			'idPais'=>'Pa&iacute;s'*/
+			'idPais'=>'Pa&iacute;s',
+            'provincia'=>'Provincia', 
+            'localidad'=>'Localidad', 
+            'direccion'=>'Direcci&oacuten;',
+            'telefono'=>'Tel&eacutefono;',
+            'telefono2'=>'Tel&eacutefono; Secundario',
+            'url_web'=>'Url Web',
+            'url_blog'=>'Url Blog',
+            'facebook'=>'Facebook',
+            'twitter'=>'Twitter',
+            'foto'=>'Foto de Perfil',
+            'info'=>'Informaci&iacuteon Adicional'
 		);
 	}
 
@@ -112,6 +123,18 @@ class Fotografos extends CActiveRecord
 		$criteria->compare('fechaCreacion',$this->fechaCreacion,true);
         $criteria->compare('token',$this->token,true);
         $criteria->compare('registrado',$this->registrado,true);
+        $criteria->compare('idPais',$this->idPais,true);
+        $criteria->compare('provincia',$this->provincia,true);
+        $criteria->compare('localidad',$this->localidad,true);
+        $criteria->compare('telefono',$this->telefono,true);
+        $criteria->compare('telefono2',$this->telefono2,true);
+        $criteria->compare('url_web',$this->url_web,true);
+        $criteria->compare('url_blog',$this->url_blog,true);
+        $criteria->compare('facebook',$this->facebook,true);
+        $criteria->compare('twitter',$this->twitter,true);
+        $criteria->compare('info',$this->info,true);
+        $criteria->compare('telefono2',$this->telefono2,true);
+        
 
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,

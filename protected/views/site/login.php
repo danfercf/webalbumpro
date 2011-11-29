@@ -34,12 +34,12 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 				<br/>
 				<div class="row">
 					<?php echo $form->checkBox($model,'rememberMe'); ?>
-					<?php echo $form->label($model,'Recordarme autom&aacute;ticamente la pr&oacute;xima vez'); ?>
+                    <?php echo $form->label($model,'Recordarme autom&aacute;ticamente la pr&oacute;xima vez'); ?>
 			
 				</div>
 				<br/>
 				<div class="row buttons">
-					<?php echo CHtml::submitButton('Ingresar',array('class'=>'button big')); ?>
+                    <?php echo CHtml::submitButton('Ingresar',array('class'=>'button big')); ?>
 				</div>
 			
 			<?php $this->endWidget(); ?>
