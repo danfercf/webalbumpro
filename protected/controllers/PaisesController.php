@@ -25,7 +25,7 @@ class PaisesController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
+	   /*return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('create'),
 				'users'=>array('*'),
@@ -36,6 +36,23 @@ class PaisesController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','index',),
+				'users'=>array('admin'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);*/
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('create','update','view','provincias',),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('index','create','update','view','delete','provincias',),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete','index','provincias',),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -137,7 +154,7 @@ class PaisesController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Paises');
+		$dataProvider=new CActiveDataProvider('paises');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -183,4 +200,22 @@ class PaisesController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
+    /**
+     * Busqueda de provincias
+     * 
+     */
+    public function actionProvincias() {
+             $data=Provincia::model()->findAll('idPais=:id',
+             array(':id'=>(int) $_POST['idPais']));
+
+             $data=CHtml::listData($data,'idProvincia','prov_nombre');
+              foreach($data as $value=>$provincia)
+                {
+                    echo CHtml::tag('option',
+                               array('value'=>$value),CHtml::encode($provincia),true);
+                }
+
+    }
 }
+?>

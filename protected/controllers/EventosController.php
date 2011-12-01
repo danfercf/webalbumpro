@@ -87,7 +87,7 @@ class EventosController extends Controller
 			//$criteria->addSearchCondition('remoteId','0');
 			$criteria->addSearchCondition('idEvento',$id);
 			
-			$local_photos=new CActiveDataProvider('Fotos',array('criteria'=>$criteria,'pagination'=>array('pageSize'=>20,)));
+			$local_photos=new CActiveDataProvider('fotos',array('criteria'=>$criteria,'pagination'=>array('pageSize'=>20,)));
 			
 			$this->render('viewPhotos',array('model'=>$model,'dataProvider'=>$local_photos),false,true);	
 		}
@@ -104,7 +104,7 @@ class EventosController extends Controller
 		$criteria = new CDbCriteria();
 		$criteria->addSearchCondition('idEvento',$id);
 		
-		$local_photos=new CActiveDataProvider('Fotos',array('criteria'=>$criteria,'pagination'=>array('pageSize'=>20,)));
+		$local_photos=new CActiveDataProvider('fotos',array('criteria'=>$criteria,'pagination'=>array('pageSize'=>20,)));
 		
 		
 		
@@ -228,7 +228,7 @@ class EventosController extends Controller
 		
 		$criteria = new CDbCriteria();
 		
-		$criteria->select = "t.*, (select path from Fotos where Fotos.idEvento = t.id LIMIT 1) mainPhoto";
+		$criteria->select = "t.*, (select path from fotos where fotos.idEvento = t.id LIMIT 1) mainPhoto";
 		//$criteria->join = 'LEFT JOIN (select path,id as mainFoto from Fotos where idEvento = t.id LIMIT 1) as Fotos ON Fotos.id = t.id';
 		$criteria->distinct = true;
 		$criteria->order = "t.id desc";
@@ -468,7 +468,7 @@ class EventosController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='eventos-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='Eventos-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -477,3 +477,4 @@ class EventosController extends Controller
 	
 	
 }
+?>

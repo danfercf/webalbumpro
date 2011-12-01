@@ -159,7 +159,6 @@ class SiteController extends Controller
 	{
 		$model=new LoginForm;
         
-        
         // if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
@@ -173,9 +172,16 @@ class SiteController extends Controller
 			$model->attributes=$_POST['LoginForm'];
             // validate user input and redirect to the previous page if valid
             
-			if($model->validate() && $model->login() && $model->comparar())
-				$this->redirect(array('eventos/index'));
+            $model->firstlogin();
+            
+			if($model->validate() && $model->login() && $model->comparar()){
+				if($model->firstlogin()==true){
+                $this->redirect(array('eventos/index'));
 				//$this->redirect(Yii::app()->user->returnUrl);
+                }else{
+                    $this->redirect(array('fotografos/update/id/'.Yii::app()->user->id));  
+                }
+            }
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));
@@ -211,28 +217,11 @@ class SiteController extends Controller
             }
 			else 
 			{    
-                /*$var=84;
-                $row = Yii::app()->db->createCommand(array(
-                    'select' => array('nombre', 'email'),
-                    'from' => 'fotografos',
-                    'where' => 'id=:id',
-                    'params' => array(':id'=>$var),
-                ))->queryRow();
-                
-                //print_r($row);
-                foreach ($row as $dato=>$v){
-                echo "$dato: ".$v."</br>";
-                }*/
-                
-			    $model->mensaje = "Confirmaci&oacute;n de correo completada correctamente. </br>
+                $model->mensaje = "Confirmaci&oacute;n de correo completada correctamente. </br>
                 Ya puede ingresar en su cuenta <a href='/site/login/'>aqu&iacute;</a>";
                 $fotografos->registrado = 1;
                 $fotografos->save(false,array('registrado'));
-                
-                /*echo "<pre>";
-                print_r($fotografos);
-                echo "</pre>";*/
-			}
+            }
         $this->render('confirmarmail',array('model'=>$model));
         
     }

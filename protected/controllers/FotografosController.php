@@ -153,23 +153,24 @@ class FotografosController extends Controller
     
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel(Yii::app()->user->id);
-		
+		//$model=$this->loadModel(Yii::app()->user->id);
+        
+        $model=Actualizar::model()->findByPk(Yii::app()->user->id);
+       		
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Fotografos']))
+		if(isset($_POST['Actualizar']))
 		{
-			$model->attributes=$_POST['Fotografos'];
-            /*echo "<pre>";
-            print_r($model);
-			echo "</pre>";*/
+			$model->attributes=$_POST['Actualizar'];
+            //Upload Imagen
+            $model->foto=CUploadedFile::getInstance($model,'foto');
 			// guardo los datos actuales "por las dudas"
 			$old_model = $this->loadModel($model->id);
 			
-			if($model->save())
-			{
-				// pregunto si el password cambio
+            if($model->save())
+			{    
+                // pregunto si el password cambio
 				if ($model->pass != '')
 				{
 					// como cambio, hasheo y guardo el nuevo password
@@ -183,19 +184,26 @@ class FotografosController extends Controller
 					$model->pass = $old_model->pass;
 					$model->pass_repeat = $old_model->pass;
 				}
-			
+			    
+                //Conservar imagen si ya existia 
+                if($model->foto !=''){
+                    echo "Vacio";
+                    $model->foto->saveAs(Yii::app()->basePath.'/../upload/'.$model->foto);
+                }else{
+                    echo "Datos";
+                    $model->foto->$old_model->foto;
+                }
+                
 				if($model->save())
-				{
-					$model->mensaje = "Los datos fueron actualizados exitosamente";
+				{   
+                    $model->mensaje = "Los datos fueron actualizados exitosamente";
 				}
 					
 			}
 		}
 
 		
-		$this->render('update',array(
-			'model'=>$model,
-		));
+		$this->render('update',array('model'=>$model,));
 	}
 
 	/**
@@ -223,7 +231,7 @@ class FotografosController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Fotografos');
+		$dataProvider=new CActiveDataProvider('fotografos');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -269,5 +277,6 @@ class FotografosController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
 }
 ?>

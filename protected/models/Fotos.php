@@ -32,7 +32,7 @@ class Fotos extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'Fotos';
+		return 'fotos';
 	}
 	
 	/**
@@ -61,7 +61,7 @@ class Fotos extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idEvento' => array(self::BELONGS_TO, 'Eventos', 'idEvento'),
+			'idEvento' => array(self::BELONGS_TO, 'eventos', 'idEvento'),
 		);
 	}
 

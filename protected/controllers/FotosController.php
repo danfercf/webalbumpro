@@ -166,7 +166,7 @@ class FotosController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Fotos');
+		$dataProvider=new CActiveDataProvider('fotos');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -213,3 +213,4 @@ class FotosController extends Controller
 		}
 	}
 }
+?>

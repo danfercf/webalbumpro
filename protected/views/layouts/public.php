@@ -6,8 +6,11 @@
 	<meta name="language" content="es" />
 	<meta name="description" content="El mejor sitio en espa–ol para fotografos profesionales. Gratis." />
 	<meta name="keywords" content="fotos, fotografos, profesionales, gratis, servicios, albums, album, eventos, evento" /> 
-
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/public-screen.css"  />
+    
+    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.cycle.all.js"></script>
+    
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/public-screen.css" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<script type="text/javascript">
 
@@ -51,7 +54,7 @@
 					<ul>
 						<li class=""><a href="/site/logout/">Salir</a></li>
 						
-						<li class=""><a href="/fotografos/update/id/<?php echo Yii::app()->user->id?>">Mi cuenta</a></li>
+						<li class=""><a href="/fotografos/update/id/<?php echo Yii::app()->user->id?>">Mi Perfil</a></li>
 						<li class=""><a href="/eventos/">Mis &aacute;lbums</a></li>
 					</ul>
 				</div>

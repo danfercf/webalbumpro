@@ -87,7 +87,6 @@ class LoginForm extends CFormModel
 	}
     public function comparar(){
         $this->new_pass=hash('md5',$this->password);
-        //echo "aaaaaaaaaaaaa".$this->new_pass;
         $row = Yii::app()->db->createCommand(array(
                     'select' => array('nombre','email'),
                     'from' => 'fotografos',
@@ -107,5 +106,21 @@ class LoginForm extends CFormModel
             return false;
         }
         
+    }
+    public function firstlogin(){
+        $this->new_pass=hash('md5',$this->password);
+        //echo "aaaaaaaaaaaaa".$this->new_pass;
+        $row = Yii::app()->db->createCommand(array(
+                    'select' => array('idPais','idProvincia'),
+                    'from' => 'fotografos',
+                    'where' => 'email=:user AND pass=:pass AND registrado=:req',
+                    'params' => array(':user'=>$this->username,':pass'=>$this->new_pass,':req'=>$this->is_registrado),
+                ))->queryRow();
+        if($row['idPais']!='' && $row['idPais']!=0 ){
+            //Si el usuario ya llenó su perfil
+            return true;
+        }else{
+            return false;
+        }
     }
 }

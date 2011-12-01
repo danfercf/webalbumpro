@@ -1,8 +1,56 @@
+<script>
+    $(document).ready(function(){
+       $('#Actualizar_idPais').change(function(){
+            $.ajax({
+              type: "POST",
+              url: "<?php echo $this->createUrl('paises/provincias');?>",
+              data: "idPais="+$(this).val(),
+              success: function(data){
+                $('#Actualizar_idProvincia').html(data);
+              }
+            });
+        });
+           
+    });
+</script>
+<style type="text/css">
+<!--
+	.row_foto{
+	    border-left: 1px solid #1490E3;
+        float: right;
+        height: 837px;
+        padding: 0 25px;
+	}
+    
+    .izquierdo{
+        float:left;
+        height: 800px;
+    }
+    .row_buttons{
+        float: left;
+        margin-top: 52px;
+        position: relative;
+    }
+    div.col1 {
+    width: 530px !important;
+    }
+    div.col2 {
+    float: right !important;
+    width: 370px !important;
+    }
+    div.box {
+    height: 900px;
+    }
+    
+-->
+</style>
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 'id'=>'fotografos-form',
-	'enableAjaxValidation'=>true,)); ?>
+'enableAjaxValidation'=>true,
+'htmlOptions' => array('enctype' => 'multipart/form-data',
+))); ?>
 
 
 <?php 
@@ -28,6 +76,7 @@ else
 
 <?php echo $form->errorSummary($model); ?>
 	
+    <div class="izquierdo">
 	<div class="row">
 		<?php echo $form->labelEx($model,'nombre'); ?><br/>
 		<?php echo $form->textField($model,'nombre',array('class'=>'formelement replacer','maxlength'=>50)); ?>
@@ -39,22 +88,55 @@ else
 		<?php echo $form->textField($model,'apellido',array('class'=>'formelement replacer','maxlength'=>50)); ?>
 		
 	</div>
+    
+    <div class="row">
+		<?php echo $form->labelEx($model,'email'); ?><br/>
+		<?php echo $form->textField($model,'email',array('class'=>'formelement longer','size'=>100,'maxlength'=>100)); ?>
+		
+	</div>
+    
     <!--SELECT PAISES-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'idPais'); ?><br/>
-        <?php echo $form->dropDownList($model,'idPais',CHtml::listData(Paises::model()->findAll(),'idPais','PAI_NOMBRE'),array('class'=>'formelement replacer','maxlength'=>50)); ?>
-        
+        <?php /*echo $form->dropDownList($model,'idPais',CHtml::listData(Paises::model()->findAll(),'idPais','PAI_NOMBRE'),array('class'=>'formelement replacer','maxlength'=>50,'empty'=>'--Por favor escoja--', 'ajax' => array(
+                    'type'=>'POST', //request type
+                    'url'=>CController::createUrl('Paises/provincias'), //url to call.
+                    'update'=>'#idProvincia', //selector to update
+                    'data'=>array('idPais'=>'js:jQuery(this).parents("form").serialize()'),
+                    ))); */?>
+        <?php 
+                echo $form->dropDownList($model,'idPais',
+                CHtml::listData(Paises::model()->findAll(), 'idPais', 'PAI_NOMBRE'),
+                array(
+                'class'=>'formelement replacer','maxlength'=>50,'empty'=>'--Por favor escoja--'/*,*/                
+                //'prompt' => '',
+                /*'ajax' => array(
+                    'type'=>'POST', //request type
+                    'url'=> $this->createUrl('paises/provincias'),  
+                    'data'=>array('idPais'=>'js:this.value'),
+                    'update'=>'idProvincia'
+                )*/));
+        ?>
+
     </div>
     <!--SELECT provincias-->
     <div class="row">
-		<?php echo $form->labelEx($model,'provincias'); ?><br/>
-        <?php echo $form->dropDownList($model,'provincias',CHtml::listData(Provincias::model()->findAll(),'idprovincia','prov_nombre'),array('class'=>'formelement replacer','maxlength'=>50)); ?>
+		<?php echo $form->labelEx($model,'idProvincia'); ?><br/>
+        <?php if($model->isNewRecord){$form->dropDownList($model,'idProvincia',array('empty'=>'--Por favor escoja--'),array('class'=>'formelement replacer','maxlength'=>50));
+              }else{
+              echo $form->dropDownList($model,'idProvincia',
+                CHtml::listData(Provincia::model()->findAll(), 'idProvincia', 'prov_nombre'),
+                array(
+                'class'=>'formelement replacer','maxlength'=>50,'empty'=>'--Por favor escoja--'
+                ));
+              }  
+         ?>
         
     </div>
     <!--SELECT localidad-->
     <div class="row">
 		<?php echo $form->labelEx($model,'localidad'); ?><br/>
-        <?php echo $form->dropDownList($model,'localidad',CHtml::listData(Localidad::model()->findAll(),'idlocalidad','loc_nombre'),array('class'=>'formelement replacer','maxlength'=>50)); ?>
+        <?php echo $form->textField($model,'localidad',array('class'=>'formelement longer','size'=>100,'maxlength'=>100)); ?>
         
     </div>
     <!--TEXT direccion-->
@@ -99,17 +181,11 @@ else
         <?php echo $form->textField($model,'twitter',array('class'=>'formelement longer','size'=>100,'maxlength'=>100)); ?>
         
     </div>
-    <!--TEXT foto-->
-    <div class="row">
-		<?php echo $form->labelEx($model,'foto'); ?><br/>
-        <?php echo $form->textField($model,'foto',array('class'=>'formelement longer','size'=>100,'maxlength'=>100)); ?>
         
-    </div>
-    
-    <!--TEXTAREA foto-->
+    <!--TEXTAREA info-->
     <div class="row">
 		<?php echo $form->labelEx($model,'info'); ?><br/>
-		<?php echo $form->textField($model,'info',array('class'=>'formelement longer','size'=>200,'maxlength'=>200)); ?>
+		<?php echo $form->textArea($model,'info',array('class'=>'formelement longer','size'=>200,'maxlength'=>200)); ?>
 		
 	</div>
 
@@ -124,21 +200,30 @@ else
 		<?php echo $form->passwordField($model,'pass_repeat',array('value'=>'','class'=>'formelement replacer','maxlength'=>100)); ?>
 		
 	</div>
-    
-    <div class="row">
-		<?php echo $form->labelEx($model,'foto'); ?><br/>
-        <?php echo $form->textField($model,'foto',array('class'=>'formelement longer','size'=>100,'maxlength'=>100)); ?>
-        
+    </div>
+    <!--FIN izquierdo-->
+    <!--INPUT FOTO-->
+    <div class="row_foto">
+        <p>
+        <span>Foto de Perfil</span>
+        </p>
+        <p>
+        <a><img src="/upload/<?php echo $model->foto;?>" style="width: 100px; height: 100px; padding: 0 45px;"/></a>
+        </p>
+        <p>
+        <?php //echo $form->labelEx($model,'foto'); ?><br/>
+        <?php echo $form->fileField($model,'foto',array('class'=>'formelement replacer','size'=>13,'maxlength'=>100)); ?>
+        </p>
     </div>
         
 	<!--NO SE MUESTRA CUANDO EXISTE id-->
     <?php if (!isset($model->id)) { ?>
 	<?php }?>
 	<br/>
-	<div class="row buttons">
+	<div class="row_buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Crear cuenta' : 'Guardar',array('class'=>'button big')); ?>
 	</div>
-
+ 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

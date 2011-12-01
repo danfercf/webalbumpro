@@ -14,7 +14,7 @@
  * The followings are the available model relations:
  * @property Eventos[] $eventoses
  */
-class Fotografos extends CActiveRecord
+class Actualizar extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -30,7 +30,7 @@ class Fotografos extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'Fotografos';
+		return 'fotografos';
 	}
 	
 	
@@ -47,20 +47,21 @@ class Fotografos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, nombre, apellido, idPais, provincia, localidad, direccion, telefono', 'required'), //falta pais
+			array('email, nombre, apellido, idPais, idProvincia, localidad, direccion, telefono', 'required'), 
 			array('pass, pass_repeat','required', 'on'=>'create'),
 			array('email','unique','message'=>'El e-mail ingresado ya existe.'),
 			array('nombre, apellido, direccion', 'length', 'max'=>50),
             array('telefono, telefono2', 'length', 'max'=>10),
-			array('email, pass, pass_repeat, token, url_web, url_blog, facebook, twitter, foto', 'length', 'max'=>100),
+			array('email, pass, pass_repeat, token, url_web, url_blog, facebook, twitter', 'length', 'max'=>100),
             array('info', 'length', 'max'=>200),
 			array('fechaCreacion', 'safe'),
+            array('foto','unsafe'),
             //array('registrado', 'required'),
             array('pass', 'compare','compareAttribute'=>'pass_repeat'),
             //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register')
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, nombre, apellido, email, pass, fechaCreacion, idPais, token, registrado, provincia, localidad, direccion, telefono, telefono2, url_web, url_blog, facebook, twitter, foto, info', 'safe', 'on'=>'search'),
+			array('id, nombre, apellido, email, pass, fechaCreacion, idPais, token, registrado, idProvincia, localidad, direccion, telefono, telefono2, url_web, url_blog, facebook, twitter, info', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,7 +73,7 @@ class Fotografos extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'eventoses' => array(self::HAS_MANY, 'Eventos', 'idFotografo'),
+			'eventoses' => array(self::HAS_MANY, 'eventos', 'idFotografo'),
 		);
 	}
 
@@ -88,19 +89,19 @@ class Fotografos extends CActiveRecord
 			'email' => 'Email',
 			'pass' => 'Contrase&ntilde;a',
 			'pass_repeat' => 'Confirmaci&oacute;n de contrase&ntilde;a',
-			'fechaCreacion' => 'Fecha Creacion',
+			'fechaCreacion' => 'Fecha Creaci&oacute;n',
 			'idPais'=>'Pa&iacute;s',
-            'provincia'=>'Provincia', 
+            'idProvincia'=>'Provincia', 
             'localidad'=>'Localidad', 
-            'direccion'=>'Direcci&oacuten;',
-            'telefono'=>'Tel&eacutefono;',
-            'telefono2'=>'Tel&eacutefono; Secundario',
+            'direccion'=>'Direcci&oacute;n',
+            'telefono'=>'Tel&eacute;fono',
+            'telefono2'=>'Tel&eacute;fono Secundario',
             'url_web'=>'Url Web',
             'url_blog'=>'Url Blog',
             'facebook'=>'Facebook',
             'twitter'=>'Twitter',
             'foto'=>'Foto de Perfil',
-            'info'=>'Informaci&iacuteon Adicional'
+            'info'=>'Informaci&oacute;n Adicional'
 		);
 	}
 
@@ -124,7 +125,7 @@ class Fotografos extends CActiveRecord
         $criteria->compare('token',$this->token,true);
         $criteria->compare('registrado',$this->registrado,true);
         $criteria->compare('idPais',$this->idPais,true);
-        $criteria->compare('provincia',$this->provincia,true);
+        $criteria->compare('idProvincia',$this->idProvincia,true);
         $criteria->compare('localidad',$this->localidad,true);
         $criteria->compare('telefono',$this->telefono,true);
         $criteria->compare('telefono2',$this->telefono2,true);

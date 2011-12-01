@@ -149,7 +149,7 @@ form { margin: 0; }
 form.default .formrow { float: left; clear: both; }
 form.default .formrow label { width: 100%; margin: 0 0 6px 0; }
 form.default .formrow .captchaimage { clear: both; }
-form.default input, form.default textarea, form.default select, .formelement { margin: 0 6px 6px 0; }
+form.default input, form.default textarea, form.default select, .formelement {margin: 0 6px 6px 0; width: 192px; }
 form.default label { width: 110px; margin: 0 10px 6px 0; padding: 4px 0 0; font-weight: bold; }
 form.default input.small { width: 80px !important; }
 form.default input.checkbox { float: left; padding: 0; margin: 8px 8px 0 0; }
@@ -206,7 +206,7 @@ input#searchbox { width: 200px !important; }
 div.search #searchbutton { margin: 3px 1px; }
 
 /* boxes */
-div.box { background: #fff; padding: 20px; margin: 0 0 20px; border: 1px solid #eee; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; -webkit-box-shadow: 0px 0px 4px #ccc; -moz-box-shadow: 0px 0px 4px #ccc; box-shadow: 0px 0px 4px #ccc; }
+div.box { background: #fff; padding: 20px; margin: 0 0 20px; border: 1px solid #eee; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; -webkit-box-shadow: 0px 0px 4px #ccc; -moz-box-shadow: 0px 0px 4px #ccc; box-shadow: 0px 0px 4px #ccc;}
 div.box form { margin: 0; padding: 0; }
 div.box .white { line-height: 2.4em; }
 div.box .white a { color: #fff; }
