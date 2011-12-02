@@ -124,8 +124,8 @@ else
 		<?php echo $form->labelEx($model,'idProvincia'); ?><br/>
         <?php if($model->isNewRecord){$form->dropDownList($model,'idProvincia',array('empty'=>'--Por favor escoja--'),array('class'=>'formelement replacer','maxlength'=>50));
               }else{
-              echo $form->dropDownList($model,'idProvincia',
-                CHtml::listData(Provincia::model()->findAll(), 'idProvincia', 'prov_nombre'),
+                echo $form->dropDownList($model,'idProvincia',
+                CHtml::listData(Provincia::model()->findAll('idPais=:idpais',array(':idpais'=>$model->idPais)), 'idProvincia', 'prov_nombre'),
                 array(
                 'class'=>'formelement replacer','maxlength'=>50,'empty'=>'--Por favor escoja--'
                 ));

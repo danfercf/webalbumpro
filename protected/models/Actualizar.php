@@ -56,6 +56,7 @@ class Actualizar extends CActiveRecord
             array('info', 'length', 'max'=>200),
 			array('fechaCreacion', 'safe'),
             array('foto','unsafe'),
+            array('foto', 'file', 'allowEmpty'=>true,'types'=>'jpg, gif, png','on'=>'update'),
             //array('registrado', 'required'),
             array('pass', 'compare','compareAttribute'=>'pass_repeat'),
             //array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on'=>'register')

@@ -7,11 +7,19 @@
 	<meta name="description" content="El mejor sitio en espa–ol para fotografos profesionales. Gratis." />
 	<meta name="keywords" content="fotos, fotografos, profesionales, gratis, servicios, albums, album, eventos, evento" /> 
     
+    <?php  
+         /* $baseUrl = Yii::app()->baseUrl; 
+          $cs = Yii::app()->getClientScript();
+          $cs->registerScriptFile($baseUrl.'/js/plupload/js/plupload.full.js');
+          $cs->registerCssFile($baseUrl.'/css/yourcss.css');*/
+    ?>
+    
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.7.min.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.cycle.all.js"></script>
+    <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
     
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/public-screen.css" />
-	<link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/public-screen.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
 	<script type="text/javascript">
 
 		  var _gaq = _gaq || [];
@@ -55,7 +63,8 @@
 						<li class=""><a href="/site/logout/">Salir</a></li>
 						
 						<li class=""><a href="/fotografos/update/id/<?php echo Yii::app()->user->id?>">Mi Perfil</a></li>
-						<li class=""><a href="/eventos/">Mis &aacute;lbums</a></li>
+						<li class=""><a href="/eventos/">Mis Eventos</a></li>
+                        <li class=""><a href="/fotografos/clientes/id/<?php echo Yii::app()->user->id?>">Clientes</a></li>
 					</ul>
 				</div>
 			<?php }?>

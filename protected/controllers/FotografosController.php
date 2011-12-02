@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 class FotografosController extends Controller
 {
@@ -31,7 +32,7 @@ class FotografosController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('update','view',),
+				'actions'=>array('update','view','clientes',),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -156,7 +157,8 @@ class FotografosController extends Controller
 		//$model=$this->loadModel(Yii::app()->user->id);
         
         $model=Actualizar::model()->findByPk(Yii::app()->user->id);
-       		
+        //$model1=$model;
+        	
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
@@ -167,7 +169,7 @@ class FotografosController extends Controller
             $model->foto=CUploadedFile::getInstance($model,'foto');
 			// guardo los datos actuales "por las dudas"
 			$old_model = $this->loadModel($model->id);
-			
+            			
             if($model->save())
 			{    
                 // pregunto si el password cambio
@@ -187,10 +189,10 @@ class FotografosController extends Controller
 			    
                 //Conservar imagen si ya existia 
                 if($model->foto !=''){
-                    echo "Vacio";
+                    
                     $model->foto->saveAs(Yii::app()->basePath.'/../upload/'.$model->foto);
                 }else{
-                    echo "Datos";
+                    
                     $model->foto->$old_model->foto;
                 }
                 
@@ -203,15 +205,55 @@ class FotografosController extends Controller
 		}
 
 		
-		$this->render('update',array('model'=>$model,));
+		$this->render('update',array('model'=>$model,'model1'=>$model1));
 	}
+    
+    /**
+    **
+    **Funcion para crear y editar nuevos clientes
+    **
+    **
+    */
+    
+	public function actionClientes(){
+	   $model=new Clientes;
+       //$model2=new Clientes;
 
-	/**
+		// Uncomment the following line if AJAX validation is needed
+	   $this->performAjaxValidation($model);
+       //$this->performAjaxValidation($model2);
+        
+	   
+		if(isset($_POST['Clientes']))
+		{   
+            $model->idFotografos=Yii::app()->user->id;
+            $model->key_novios=1;
+            $model->key_boda=1;
+            $model->key_role=1;
+            $model->key_padres=1;
+            $model->attributes=$_POST['Clientes'];
+            if($_SESSION["formulario1"]!=null){
+                if($model->save()){
+    			     $model->attributes=$_SESSION["formulario1"];
+                     $model->save();
+                     $_SESSION["formulario1"]=null;
+                }
+            }else{
+                $_SESSION["formulario1"]=$_POST['Clientes'];
+            }
+        }
+       $this->render('clientes',array('model'=>$model,'model2'=>$model2));
+       
+	}
+    
+    
+    /**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionDelete($id)
+     
+    public function actionDelete($id)
 	{
 		if(Yii::app()->request->isPostRequest)
 		{

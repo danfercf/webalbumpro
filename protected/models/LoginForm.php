@@ -124,3 +124,4 @@ class LoginForm extends CFormModel
         }
     }
 }
+?>

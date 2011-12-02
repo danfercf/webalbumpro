@@ -17,18 +17,30 @@ $this->layout='public';
 ?>
 
 <div class="tpl-2col">
-	<div class="col1">
-		<div class="box">
+	<div class="menu_eventos">
+    <div class="escoger">
+					<ul>
+						<li class=""><a href="#">Bodas</a></li>
+						<li class=""><a href="#">Quincea&ntilde;os</a></li>
+                        <li class=""><a href="#">Otros</a></li>
+					</ul>
+	</div>
+    </div>
+    <div class="col1">
+    	<div class="box">
 			<?php //echo $this->renderPartial('_form', array('model'=>$model)); ?>
             <!--NUEVO-->
             <?php echo $this->renderPartial('_form_cliente', array('model'=>$model)); ?>
             <!--FIN NUEVO-->
 		</div>
 	</div>
-	<div class="col2">
-		<h1><strong>Mi cuenta</strong></h1>
-		<h3>Desde esta pantalla puedes actualizar tus datos.</h3>
-		<p class="note">Campos marcados con <span class="required">*</span> son requeridos.</p>
+	<!--<div class="col2">
+		<div class="box">-->
+			<?php //echo $this->renderPartial('_form', array('model'=>$model)); ?>
+            <!--NUEVO-->
+            <?php //echo $this->renderPartial('_form_cliente2', array('model2'=>$model2)); ?>
+            <!--FIN NUEVO-->
+	<!--	</div>
 		
-	</div>
+	</div>-->
 </div>
